@@ -313,6 +313,9 @@ function togglePaymentSection() {
     btn.classList.toggle('collapsed', !isPaymentsExpanded);
 }
 
+// ============================================================
+//  showResult - مُعدَّل حسب الطلب
+// ============================================================
 function showResult(user) {
     document.querySelector('.search-container').style.display = 'none';
     document.getElementById('instructions-section').style.display = 'none';
@@ -320,22 +323,33 @@ function showResult(user) {
     document.getElementById('result-section').style.display = 'block';
     document.getElementById('result-section').style.animation = 'slideInUp 0.4s ease-out';
 
-    // Sticky header - Employee Data Grid (2 columns)
+    // =============================================
+    // 1. Sticky header – يحتوي على جميع الحقول،
+    //    لكن في الشاشة نعرض فقط (الاسم، الدرجة، عدد التذاكر)
+    //    وفي الطباعة تظهر الكل.
+    // =============================================
     const stickyContainer = document.getElementById('sticky-header-container');
     clearElement(stickyContainer);
 
+    // تعريف الحقول مع خاصية primary (true للثلاثة المطلوبة)
     const stickyFields = [
-        { key: 'الاسم', label: 'الاسم', icon: 'fa-user' },
-        { key: 'الرقم القومى', label: 'الرقم القومي', icon: 'fa-id-card' },
-        { key: 'الدرجة', label: 'الدرجة', icon: 'fa-star' },
-        { key: 'الحالة الاجتماعية', label: 'الحالة الاجتماعية', icon: 'fa-people-arrows' },
-        { key: 'اساسى 30/6', label: 'أساسي 2014', icon: 'fa-coins', isCurrency: true },
-        { key: 'اساسى يوليو 2025', label: 'أساسي يوليو 2026', icon: 'fa-coins', isCurrency: true },
-        { key: 'عدد التذاكر', label: 'عدد التذاكر', icon: 'fa-ticket-alt' }
+        { key: 'الاسم', label: 'الاسم', icon: 'fa-user', primary: true },
+        { key: 'الرقم القومى', label: 'الرقم القومي', icon: 'fa-id-card', primary: false },
+        { key: 'الدرجة', label: 'الدرجة', icon: 'fa-star', primary: true },
+        { key: 'الحالة الاجتماعية', label: 'الحالة الاجتماعية', icon: 'fa-people-arrows', primary: false },
+        { key: 'اساسى 30/6', label: 'أساسي 2014', icon: 'fa-coins', isCurrency: true, primary: false },
+        { key: 'اساسى يوليو 2025', label: 'أساسي يوليو 2026', icon: 'fa-coins', isCurrency: true, primary: false },
+        { key: 'عدد التذاكر', label: 'عدد التذاكر', icon: 'fa-ticket-alt', primary: true }
     ];
 
+    // تصنيف الحقول
+    const primaryFields = stickyFields.filter(f => f.primary);
+    const secondaryFields = stickyFields.filter(f => !f.primary);
+
+    // بناء الشريط الثابت
     stickyFields.forEach(field => {
         let value = user[normalizeKey(field.key)];
+        // معالجة المفاتيح البديلة
         if (!value && field.key === 'اساسى 30/6') {
             value = user['اساسى 2014'] || user[normalizeKey('اساسى 2014')];
         }
@@ -347,7 +361,8 @@ function showResult(user) {
         }
         if (value) {
             const row = document.createElement('div');
-            row.className = 'sticky-header-row';
+            // إضافة فئة primary أو secondary للتحكم في الإظهار
+            row.className = `sticky-header-row ${field.primary ? 'sticky-primary' : 'sticky-secondary'}`;
             const displayValue = field.isCurrency ? formatCurrency(value) : escapeHTML(String(value));
             row.innerHTML = `
                 <div class="sticky-header-label">
@@ -360,22 +375,47 @@ function showResult(user) {
         }
     });
 
-    // Data container
+    // =============================================
+    // 2. البيانات الأساسية (تظهر في الشاشة فقط،
+    //    وتختفي في الطباعة لتجنب التكرار)
+    // =============================================
     const dataContainer = document.getElementById('user-data');
     clearElement(dataContainer);
 
-    // ===== PAYMENTS SECTION (المدفوعات الإضافية) =====
-    const excludeFields = [
-        'الاسم', 'الرقم القومى', 'الدرجة', 'الحالة الاجتماعية', 'عدد التذاكر',
-        'اساسى 30/6', 'اساسى يوليو 2025', 'اساسى 2014', 'اساسى يوليو 2026',
-        'البريد', 'نقدى مايو 2026', 'نقدى_مايو_2026',
-        'اساسى يوليو 2026', 'اساسى يوليو 2025'
-    ];
+    // إنشاء حاوية للبيانات الأساسية (تظهر في الشاشة، وتُخفى في الطباعة)
+    const basicDataContainer = document.createElement('div');
+    basicDataContainer.className = 'basic-data-section'; // سيتم إخفاؤها في الطباعة
+
+    // الحقول غير الأساسية (التي ليست من الثلاثة)
+    secondaryFields.forEach(field => {
+        let value = user[normalizeKey(field.key)];
+        if (!value && field.key === 'اساسى 30/6') {
+            value = user['اساسى 2014'] || user[normalizeKey('اساسى 2014')];
+        }
+        if (!value && field.key === 'اساسى يوليو 2025') {
+            value = user['اساسى يوليو 2026'] || user[normalizeKey('اساسى يوليو 2026')] || user['اساسى يوليو 2025'];
+        }
+        if (value) {
+            const row = makeInfoRow(field.label, value, field.icon, field.isCurrency);
+            basicDataContainer.appendChild(row);
+        }
+    });
+
+    // إضافة حاوية البيانات الأساسية إلى dataContainer
+    dataContainer.appendChild(basicDataContainer);
+
+    // =============================================
+    // 3. المدفوعات الإضافية (كما هي)
+    // =============================================
+    // قائمة المفاتيح التي يجب استبعادها من المدفوعات (جميع الحقول السبعة + البدائل + البريد)
+    const baseExcludeKeys = stickyFields.map(f => f.key);
+    const additionalExclude = ['اساسى 2014', 'اساسى يوليو 2026', 'اساسى يوليو 2025', 'البريد', 'نقدى مايو 2026', 'نقدى_مايو_2026'];
+    const excludeKeys = [...baseExcludeKeys, ...additionalExclude];
 
     const paymentItems = [];
     Object.keys(user).forEach(key => {
         const normalized = normalizeKey(key);
-        if (!excludeFields.some(f => normalizeKey(f) === normalized)) {
+        if (!excludeKeys.some(f => normalizeKey(f) === normalized)) {
             const value = user[key];
             if (value) paymentItems.push({ key, value });
         }
