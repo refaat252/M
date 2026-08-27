@@ -745,6 +745,35 @@ button {
     border: none;
 }
 
+/* ============================================================
+   التعديلات الجديدة: إخفاء الحقول الثانوية في الشاشة، وإظهارها في الطباعة
+   ============================================================ */
+@media screen {
+    .sticky-header-row.sticky-secondary {
+        display: none !important;
+    }
+}
+
+@media print {
+    /* في الطباعة نظهر جميع الحقول في الـ sticky header */
+    .sticky-header-row.sticky-secondary {
+        display: flex !important;
+    }
+
+    /* نخفي قسم البيانات الأساسية (الموجود في المحتوى القابل للتمرير)
+       لتجنب تكرار البيانات مع الـ sticky header */
+    .basic-data-section {
+        display: none !important;
+    }
+
+    /* نضمن ظهور جميع الحقول في الـ sticky header بشكل صحيح */
+    .sticky-header-container {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.4rem !important;
+    }
+}
+
 /* ===== Dark Mode ===== */
 @media (prefers-color-scheme: dark) {
     :root {
@@ -1015,7 +1044,6 @@ button {
     word-break: break-word;
 }
 
-/* ===== Print Styles (محسّنة بالكامل) ===== */
 /* ===== Print Styles (محسّنة بالكامل) ===== */
 @media print {
     @page {
