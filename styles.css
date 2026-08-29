@@ -73,22 +73,29 @@ body {
 /* ===== Skip Link (Accessibility) ===== */
 .skip-link {
     position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--primary);
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    z-index: 1000;
-    border-radius: 0 0 var(--radius-md) var(--radius-md);
-    font-weight: 600;
-    box-shadow: var(--shadow-md);
-    transition: top var(--transition-fast);
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
 }
 
 .skip-link:focus {
+    width: auto;
+    height: auto;
+    padding: 10px 20px;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
     top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2563eb;
+    color: white;
+    z-index: 1000;
 }
 
 /* ===== Container ===== */
@@ -998,366 +1005,17 @@ button {
     }
 
     /* Modal */
-    .modal-overlay {
-        background: rgba(0, 0, 0, 0.7);
-    }
-
-    .email-modal .bg-white {
-        background: #1e293b !important;
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar-track {
-        background: #1e293b;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #475569;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: #64748b;
-    }
-}
-
-/* ===== Print Styles (محسّنة بالكامل) ===== */
-
-/* ===== Salary Grid (عمودين) ===== */
-.salary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-}
-
-.salary-grid-item {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    border-radius: var(--radius-md);
-    padding: 1rem 1.25rem;
-    border: 1px solid #e2e8f0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.salary-grid-label {
-    color: #475569;
-    font-weight: 600;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-}
-
-.salary-grid-value {
-    color: var(--primary-dark);
-    font-weight: 700;
-    font-size: 1.1rem;
-    direction: ltr;
-    text-align: left;
-}
-
-/* ===== Info Grid (بيانات الموظف - عمودين) ===== */
-.info-grid-section {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
-}
-
-.info-grid-item {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border-radius: var(--radius-md);
-    padding: 0.875rem 1rem;
-    border: 1px solid #e2e8f0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-    transition: all var(--transition-fast);
-}
-
-.info-grid-item:hover {
-    background: #f1f5f9;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-}
-
-.info-grid-label {
-    color: #475569;
-    font-weight: 600;
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-}
-
-.info-grid-value {
-    color: var(--text-main);
-    font-weight: 700;
-    font-size: 0.95rem;
-    word-break: break-word;
-}
-
-/* ===== Print Styles (محسّنة بالكامل) ===== */
-@media print {
-    @page {
-        size: A4;
-        margin: 12mm 10mm;
-    }
-
-    /* إخفاء كل العناصر التفاعلية والغير مرغوبة */
-    .search-container,
-    #instructions-section,
-    #new-search-btn,
-    #print-btn,
-    #email-modal,
-    #email-modal-overlay,
-    .email-modal,
-    .modal-overlay,
-    .collapse-toggle-btn,
-    .data-clear-notification,
-    .skip-link,
-    #update-success,
-    #error-section,
-    header,
-    .highlight-box {
-        display: none !important;
-    }
-
-    /* إعادة ضبط الصفحة */
-    body {
-        background: white !important;
-        color: #000 !important;
-        font-size: 10pt;
-        line-height: 1.4;
-        margin: 0;
-        padding: 0;
-    }
-
-    .container {
-        max-width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    /* البطاقات في الطباعة */
-    .result-card {
-        box-shadow: none !important;
-        border: 1px solid #ccc !important;
-        border-radius: 0 !important;
-        padding: 0.5rem !important;
-        margin: 0 !important;
-        background: white !important;
-        page-break-inside: avoid;
-    }
-
-    .result-card h2 {
-        font-size: 12pt !important;
-        color: #000 !important;
-        margin-bottom: 0.5rem !important;
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 0.25rem;
-    }
-
-    /* البيانات الأساسية - عمودين */
-    .basic-section-sticky {
-        position: static !important;
-        box-shadow: none !important;
-        border: 1px solid #ccc !important;
-        background: #f9f9f9 !important;
-        padding: 0.5rem !important;
-        margin-bottom: 0.5rem !important;
-        page-break-inside: avoid;
-    }
-
-    .sticky-header-container {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.4rem !important;
-    }
-
-    .sticky-header-row {
-        padding: 0.3rem 0.5rem !important;
-        border-right: 2px solid #000 !important;
-        background: transparent !important;
-        gap: 0.15rem !important;
-        min-height: auto !important;
-    }
-
-    .sticky-header-label {
-        font-size: 8pt !important;
-        color: #333 !important;
-    }
-
-    .sticky-header-item {
-        font-size: 9pt !important;
-        color: #000 !important;
-        direction: ltr !important;
-        text-align: left !important;
-    }
-
-    /* الأقسام */
-    .salary-card {
-        box-shadow: none !important;
-        border: 1px solid #ddd !important;
-        border-radius: 0 !important;
-        padding: 0.5rem !important;
-        margin-bottom: 0.5rem !important;
-        background: white !important;
-        page-break-inside: avoid;
-    }
-
-    .section-header {
-        font-size: 10pt !important;
-        color: #000 !important;
-        border-right: 3px solid #000 !important;
-        margin-bottom: 0.5rem !important;
-    }
-
-    /* المدفوعات */
-    .payment-item {
-        padding: 0.2rem 0 !important;
-        border-bottom: 1px dotted #ccc !important;
-    }
-
-    .amount {
-        font-size: 9pt !important;
-        color: #000 !important;
-    }
-
-    .total {
-        border-top: 1px solid #000 !important;
-        padding-top: 0.4rem !important;
-        margin-top: 0.4rem !important;
-        font-size: 10pt !important;
-    }
-
-    /* فصل الصفحات */
-    .salary-card,
-    .basic-section-sticky,
-    .sticky-header-row {
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-
-    #user-data {
-        page-break-before: auto;
-    }
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 640px) {
-    .container {
-        padding: 0.75rem;
-    }
-
-    header h1 {
-        font-size: 1.5rem;
-    }
-
-    .info-item {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 0.75rem 1rem;
-    }
-
-    .info-label {
-        min-width: unset;
-        font-size: 0.85rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .info-value {
-        font-size: 0.9rem;
-        text-align: right;
-        width: 100%;
-    }
-
-    .sticky-header-row {
-        grid-template-columns: 1fr;
-        gap: 0.25rem;
-    }
-
-    .sticky-header-label {
-        font-size: 0.8rem;
-    }
-
-    .sticky-header-item {
-        font-size: 0.85rem;
-    }
-
-    .payment-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
-    }
-
-    .payment-item .amount {
-        margin-top: 0;
-    }
-
-    .total {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
-    }
-
-    .salary-card {
-        padding: 1rem;
-    }
-
-    .section-header {
-        font-size: 0.95rem;
-    }
-
-    .highlight-box {
-        padding: 1rem;
-    }
-
-    .collapse-toggle-btn {
-        padding: 0.875rem 1rem;
-        font-size: 0.9rem;
-    }
-
-    .data-clear-notification {
-        left: 10px;
-        right: 10px;
-        bottom: 10px;
-    }
-
     .email-modal {
-        width: 95%;
-        max-width: none;
+        background: var(--bg-glass);
+        border-color: #475569;
     }
 
-    #search-btn {
-        font-size: 1rem !important;
-        padding: 0.75rem 1rem !important;
+    #close-email-modal {
+        color: #f8fafc;
     }
 
-
-    .salary-grid,
-    .info-grid-section {
-        grid-template-columns: 1fr !important;
-    }
-
-
-    .sticky-header-container {
-        grid-template-columns: 1fr !important;
-    }
-
-    .sticky-header-row {
-        min-height: auto !important;
-    }
-}
-
-@media (max-width: 400px) {
-    header h1 {
-        font-size: 1.25rem;
-    }
-
-    .result-card h2 {
-        font-size: 1.1rem;
-    }
-
-    .basic-section-sticky {
-        padding: 0.75rem;
+    #close-email-modal:hover {
+        background: #334155;
+        color: #fca5a5;
     }
 }
